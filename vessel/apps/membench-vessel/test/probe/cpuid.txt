@@ -1,0 +1,9 @@
+{
+    "BriefDescription": "Counts streaming stores that missed the local socket's L1, L2, and L3 caches.",
+    "EventCode": "0x2A,0x2B",
+    "EventName": "OCR.STREAMING_WR.L3_MISS",
+    "MSRIndex": "0x1a6,0x1a7",
+    "MSRValue": "0x94000800",
+    "SampleAfterValue": "100003",
+    "UMask": "0x1"
+}

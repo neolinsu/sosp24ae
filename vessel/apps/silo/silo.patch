@@ -1,0 +1,99 @@
+diff --git a/Makefile b/Makefile
+index b932a98..835abd5 100644
+--- a/Makefile
++++ b/Makefile
+@@ -76,7 +76,7 @@ else
+ 	$(error invalid mode)
+ endif
+ 
+-CXXFLAGS := -g -Wall -std=c++0x -Wno-maybe-uninitialized
++CXXFLAGS := -g -Wall -std=c++0x -Wno-format-truncation -Wno-maybe-uninitialized -Wno-unused-variable
+ CXXFLAGS += -MD -Ithird-party/lz4 -DCONFIG_H=\"$(CONFIG_H)\"
+ 
+ ifeq ($(INSTR),1)
+diff --git a/allocator.cc b/allocator.cc
+index d3d16f4..517fe89 100644
+--- a/allocator.cc
++++ b/allocator.cc
+@@ -310,6 +310,7 @@ allocator::ReleaseArenas(void **arenas)
+ static void
+ numa_hint_memory_placement(void *px, size_t sz, unsigned node)
+ {
++  return;
+   struct bitmask *bm = numa_allocate_nodemask();
+   numa_bitmask_setbit(bm, node);
+   numa_interleave_memory(px, sz, bm);
+diff --git a/macros.h b/macros.h
+index b128fe6..2b26092 100644
+--- a/macros.h
++++ b/macros.h
+@@ -24,7 +24,7 @@
+ //#define TUPLE_LOCK_OWNERSHIP_CHECKING
+ //#define MEMCHECK_MAGIC 0xFF
+ //#define TUPLE_MAGIC
+-#define PROTO2_CAN_DISABLE_GC
++//#define PROTO2_CAN_DISABLE_GC
+ //#define PROTO2_CAN_DISABLE_SNAPSHOTS
+ //#define USE_PERF_CTRS
+ 
+diff --git a/txn_proto2_impl.cc b/txn_proto2_impl.cc
+index fad91be..37cc26e 100644
+--- a/txn_proto2_impl.cc
++++ b/txn_proto2_impl.cc
+@@ -484,6 +484,7 @@ transaction_proto2_static::InitGC()
+   g_flags->g_gc_init.store(true, memory_order_release);
+ }
+ 
++#if 0
+ static void
+ sleep_ro_epoch()
+ {
+@@ -493,6 +494,7 @@ sleep_ro_epoch()
+   t.tv_nsec = sleep_ns % ONE_SECOND_NS;
+   nanosleep(&t, nullptr);
+ }
++#endif
+ 
+ void
+ transaction_proto2_static::PurgeThreadOutstandingGCTasks()
+@@ -506,20 +508,14 @@ transaction_proto2_static::PurgeThreadOutstandingGCTasks()
+   uint64_t e;
+   if (!ctx.queue_.get_latest_epoch(e))
+     return;
+-  // wait until we can clean up e
+-  for (;;) {
+-    const uint64_t last_tick_ex = ticker::s_instance.global_last_tick_exclusive();
+-    const uint64_t ro_tick_ex = to_read_only_tick(last_tick_ex);
+-    if (unlikely(!ro_tick_ex)) {
+-      sleep_ro_epoch();
+-      continue;
+-    }
+-    const uint64_t ro_tick_geq = ro_tick_ex - 1;
+-    if (ro_tick_geq < e) {
+-      sleep_ro_epoch();
+-      continue;
+-    }
+-    break;
++  const uint64_t last_tick_ex = ticker::s_instance.global_last_tick_exclusive();
++  const uint64_t ro_tick_ex = to_read_only_tick(last_tick_ex);
++  if (unlikely(!ro_tick_ex)) {
++    return;
++  }
++  const uint64_t ro_tick_geq = ro_tick_ex - 1;
++  if (ro_tick_geq < e) {
++     return;
+   }
+   clean_up_to_including(ctx, e);
+   INVARIANT(ctx.queue_.empty());
+diff --git a/txn_proto2_impl.h b/txn_proto2_impl.h
+index 83021ab..62618e8 100644
+--- a/txn_proto2_impl.h
++++ b/txn_proto2_impl.h
+@@ -1141,6 +1141,7 @@ public:
+   void
+   on_post_rcu_region_completion()
+   {
++    return;
+ #ifdef PROTO2_CAN_DISABLE_GC
+     if (!IsGCEnabled())
+       return;

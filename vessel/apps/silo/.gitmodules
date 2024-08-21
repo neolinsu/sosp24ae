@@ -1,0 +1,3 @@
+[submodule "silo"]
+	path = silo
+	url = git@github.com:ix-project/silo.git

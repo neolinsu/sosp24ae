@@ -1,0 +1,7 @@
+*.o
+*.d
+silotpcc-ix
+silotpcc-linux
+silotpcc-shenango
+spin-ix
+spin-linux
