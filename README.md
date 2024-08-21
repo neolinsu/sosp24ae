@@ -38,8 +38,8 @@ These nodes have installed dependencies of Vessel and the compared systems.
 On the monitor node, run:
 
 ```bash
-cd ./sosp24-ae
-bash scripts/all.sh
+cd ./sosp24-ae/scripts
+bash all.sh
 ```
 
 The result of each figure or table in the evaluation section will be printed to the `stdout`,
