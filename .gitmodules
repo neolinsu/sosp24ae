@@ -1,0 +1,9 @@
+[submodule "linux-uintr"]
+	path = linux-uintr
+	url = https://github.com/neolinsu/linux-uintr.git
+[submodule "glibc-vessel"]
+	path = glibc-vessel
+	url = https://github.com/neolinsu/glibc-vessel.git
+[submodule "caladan-ae"]
+	path = caladan-ae
+	url = https://github.com/thustorage/osdi21ae.git
