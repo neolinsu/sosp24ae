@@ -1,0 +1,15 @@
+server:
+  - root_path: "/home/sosp24ae/sosp24-ae/vessel"
+    vessel_name: "server"
+    nicpci: "0000:a8:00.0"
+    vessel_cpus: "3"
+    iokernel_cpus: "1-3"
+    password: "sosp24ae!"
+    sched_config: 'ias nobw noht'
+    cache_path: "/home/sosp24ae/sosp24-ae/vessel/apps/switch-vessel/cache"
+    cache2_path: "/home/sosp24ae/sosp24-ae/vessel/apps/switch-vessel/cache2"
+    cache_config_path: "/home/sosp24ae/sosp24-ae/vessel/apps/cache-vessel/be.config"
+    cache2_config_path: "/home/sosp24ae/sosp24-ae/vessel/apps/cache-vessel/be2.config"
+    perf_path: ""
+    be_cmd: ""
+    probe_cmd: ""
