@@ -6,4 +6,4 @@
 	url = https://github.com/neolinsu/glibc-vessel.git
 [submodule "caladan-ae"]
 	path = caladan-ae
-	url = https://github.com/thustorage/osdi21ae.git
+	url = https://github.com/joshuafried/caladan-ae.git
